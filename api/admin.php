@@ -1,11 +1,16 @@
 <?php
 session_start();
-// Senha de admin guardada como SHA-256 + salt (nunca em texto puro no repositório).
-$PASS_SALT = 'd679f4fb54851453699885510a6dd43e';
-$PASS_HASH = '87ccbe15dcc1a01b236a7b350c40a292e545e6c460b30df160d4221650196953';
+// O segredo do admin (salt + hash da senha) fica FORA do git, em api/admin_secret.php.
+// Esse arquivo é enviado manualmente só ao servidor e nunca é versionado.
+$secret = __DIR__ . '/admin_secret.php';
+if (!is_file($secret)) {
+    http_response_code(500);
+    exit('Admin não configurado: falta o arquivo api/admin_secret.php no servidor.');
+}
+require $secret; // define $PASS_SALT e $PASS_HASH
 
 // --- Login (parênteses corrigidos + comparação em tempo constante) ---
-if (isset($_POST['pw'])) {
+if (isset($_POST['pw']) && isset($PASS_SALT, $PASS_HASH)) {
     $try = hash('sha256', $PASS_SALT . (string)$_POST['pw']);
     if (hash_equals($PASS_HASH, $try)) { $_SESSION['ok'] = true; }
 }

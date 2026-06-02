@@ -1,0 +1,2 @@
+# Segredo do admin — nunca versionar (sobe só no servidor)
+api/admin_secret.php

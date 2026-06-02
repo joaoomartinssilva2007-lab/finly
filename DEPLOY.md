@@ -35,8 +35,11 @@ Resultado esperado: a `/app` no servidor tem SÓ um build, plano, sem aninhament
 
 ## Tarefa 2 — Aplicar admin seguro
 
-1. Substitua **`api/admin.php`** pelo arquivo do GitHub (corrige bypass de senha; senha
-   agora é hash SHA-256 + salt).
+1. Substitua **`api/admin.php`** pelo arquivo do GitHub (corrige bypass de senha; lê o
+   segredo de `admin_secret.php`).
+1b. **Suba `api/admin_secret.php`** (o segredo da senha — NÃO está no GitHub por segurança;
+   é fornecido à parte). Sem ele, o admin retorna erro 500 ("Admin não configurado").
+   Como é `.php`, o servidor executa e não expõe o conteúdo via HTTP.
 2. `api/data/codes.json` no repo é só um template vazio `{}`. No servidor, deixe o
    `codes.json` existente (ou crie `{}` se não existir). ⚠️ NÃO sobrescreva o `codes.json`
    do servidor com o do repo se já houver códigos gerados — isso apagaria as licenças.
