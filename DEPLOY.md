@@ -37,15 +37,21 @@ Resultado esperado: a `/app` no servidor tem SÓ um build, plano, sem aninhament
 
 1. Substitua **`api/admin.php`** pelo arquivo do GitHub (corrige bypass de senha; senha
    agora é hash SHA-256 + salt).
-2. Substitua **`api/data/codes.json`** (no servidor está `{}` vazio).
-   ⚠️ NÃO sobrescreva o `codes.json` depois que houver códigos de clientes gerados pelo
-   admin no ar — isso apagaria as licenças.
+2. `api/data/codes.json` no repo é só um template vazio `{}`. No servidor, deixe o
+   `codes.json` existente (ou crie `{}` se não existir). ⚠️ NÃO sobrescreva o `codes.json`
+   do servidor com o do repo se já houver códigos gerados — isso apagaria as licenças.
 3. `api/validate.php` não mudou (pode pular).
+
+### Gerar o acesso do dono (pós-deploy)
+Não há código pré-definido no repositório (por segurança). Depois de subir o admin:
+1. Acesse `getfinly.com.br/api/admin.php` e entre.
+2. Selecione plano **Vitalício** e clique **Gerar** → copie o código gerado.
+3. Use esse código no app pra destravar (ele trava no 1º dispositivo).
 
 ## Verificação (após subir)
 
 1. `https://getfinly.com.br/app/` → abre o app (não fica em branco). Ctrl+F5 p/ limpar cache.
-2. No app, código `FINLY-7C25B5-1134F5` → destrava (vitalício do dono).
+2. No app, use o código vitalício gerado no admin → destrava.
 3. `https://getfinly.com.br/api/admin.php` → senha errada recusa; senha correta entra.
 4. (Opcional) DevTools → Network: `index-r_foOKkf.js` deve voltar com
    `Content-Type: application/javascript` (e não `text/html`).
